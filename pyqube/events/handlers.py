@@ -11,6 +11,7 @@ from pyqube.events.exceptions import (
 )
 from pyqube.types import (
     AnsweringTicket,
+    PublicTicket,
     QueueWithAverageWaitingTime,
     QueueWithWaitingTickets,
     QueuingSystemReset,
@@ -234,3 +235,13 @@ class TicketHandler(MQTTEventHandlerBase, ABC):
             topic += f"/counters/{counter_id}/tickets/called"
 
         return self.add_mqtt_handler(topic, AnsweringTicket)
+
+    def on_ticket_changed_state(self):
+        """
+        Registers a handler for the 'changed-state' event of tickets.
+
+        Returns:
+            The decorator for the handler function.
+        """
+        topic = f"locations/{self.location_id}/tickets/+/changed-state"
+        return self.add_mqtt_handler(topic, PublicTicket)

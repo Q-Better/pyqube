@@ -92,6 +92,24 @@ class Ticket:
 
 
 @dataclass
+class PublicTicket:
+    """
+    Class with public attributes of Qube's Ticket
+    """
+    id: int
+    queue_dest: int
+    priority: bool
+    state: TicketStateEnum
+    printed_tag: str
+    printed_number: str
+    created_at: datetime
+    invalidated_by_system: Optional[InvalidatedBySystemEnum]
+
+    def __post_init__(self):
+        self.created_at = convert_str_to_datetime(self.created_at)
+
+
+@dataclass
 class Answering:
     """
     Class with all attributes of Qube's Answering

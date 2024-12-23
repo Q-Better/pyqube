@@ -7,6 +7,7 @@ from pyqube.events.exceptions import InvalidTicketHandlerArgumentsError
 from pyqube.types import (
     AnsweringTicket,
     InvalidatedBySystemEnum,
+    PublicTicket,
     Ticket,
     TicketStateEnum,
 )
@@ -129,3 +130,30 @@ class TestTicketHandlerDecorator:
             Mock(topic="locations/1/tickets/generated", payload=json.dumps(payload).encode('utf-8'))
         )
         handler.assert_called_once_with(Ticket(**payload))
+
+    def test_on_ticket_changed_state(self, mqtt_client):
+        """
+        Test that the handler is correctly registered and called for ticket generated events.
+        """
+        handler = Mock()
+
+        @mqtt_client.on_ticket_changed_state()
+        def handle(msg):
+            handler(msg)
+
+        payload = {
+            "id": 12345,
+            "queue_dest": 7,
+            "priority": True,
+            "state": TicketStateEnum.END,
+            "printed_tag": "VIP",
+            "printed_number": "000123",
+            "created_at": '2024-01-01T00:00:00.000000Z',
+            "invalidated_by_system": InvalidatedBySystemEnum.INVALIDATE_RESET
+        }
+
+        mqtt_client._on_message(
+            mqtt_client.client, None,
+            Mock(topic="locations/1/tickets/1/changed-state", payload=json.dumps(payload).encode('utf-8'))
+        )
+        handler.assert_called_once_with(PublicTicket(**payload))

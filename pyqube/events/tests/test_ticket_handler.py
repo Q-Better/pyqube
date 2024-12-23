@@ -40,3 +40,8 @@ class TestTicketHandler:
         """Test the behavior when both queue_id and counter_id are provided."""
         with pytest.raises(InvalidTicketHandlerArgumentsError):
             ticket_handler.on_ticket_called(queue_id=90, counter_id=124)
+
+    def test_on_ticket_changed_state(self, ticket_handler):
+        """Test that on_ticket_changed_state registers the correct handler."""
+        handler = ticket_handler.on_ticket_changed_state()
+        assert handler is not None
