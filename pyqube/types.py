@@ -56,42 +56,6 @@ class TicketStateEnum:
 
 
 @dataclass
-class Ticket:
-    """
-    Class with all attributes of Qube's Ticket
-    """
-
-    id: int
-    signature: str
-    updated_at: datetime
-    number: int
-    printed_tag: str
-    printed_number: str
-    note: Optional[str]
-    priority: bool
-    priority_level: int
-    created_at: datetime
-    state: TicketStateEnum
-    invalidated_by_system: Optional[InvalidatedBySystemEnum]
-    ticket_local_runner: Optional[int]
-    queue: int
-    queue_dest: int
-    counter_dest: Optional[int]
-    profile_dest: Optional[int]
-    generated_by_ticket_kiosk: Optional[int]
-    generated_by_profile: Optional[int]
-    generated_by_totem: Optional[int]
-    is_generated_by_api_key: Optional[bool]
-    generated_by_api_key: Optional[int]
-    local_runner: Optional[int]
-    tags: List[str]
-
-    def __post_init__(self):
-        self.created_at = convert_str_to_datetime(self.created_at)
-        self.updated_at = convert_str_to_datetime(self.updated_at)
-
-
-@dataclass
 class PublicTicket:
     """
     Class with public attributes of Qube's Ticket
@@ -107,6 +71,34 @@ class PublicTicket:
 
     def __post_init__(self):
         self.created_at = convert_str_to_datetime(self.created_at)
+
+
+@dataclass
+class Ticket(PublicTicket):
+    """
+    Class with all attributes of Qube's Ticket
+    This class inherits from PublicTicket due to common attributes between them
+    """
+    signature: str
+    updated_at: datetime
+    number: int
+    note: Optional[str]
+    priority_level: int
+    ticket_local_runner: Optional[int]
+    queue: int
+    counter_dest: Optional[int]
+    profile_dest: Optional[int]
+    generated_by_ticket_kiosk: Optional[int]
+    generated_by_profile: Optional[int]
+    generated_by_totem: Optional[int]
+    is_generated_by_api_key: Optional[bool]
+    generated_by_api_key: Optional[int]
+    local_runner: Optional[int]
+    tags: List[str]
+
+    def __post_init__(self):
+        self.created_at = convert_str_to_datetime(self.created_at)
+        self.updated_at = convert_str_to_datetime(self.updated_at)
 
 
 @dataclass
