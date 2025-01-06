@@ -10,7 +10,6 @@ from pyqube.types import (
     Ticket,
 )
 
-
 # Retrieve required environment variables for API configuration
 API_KEY = os.environ.get(
     "QUBE_API_KEY", "your_api_key_here"
@@ -56,6 +55,10 @@ def example():
     @qube_client.on_queuing_system_resets_created()
     def handle_system_reset(reset: QueuingSystemReset):
         print(f"Queuing system reset detected: {reset}")
+
+    @qube_client.on_ticket_changed_state()
+    def handle_changed_state_ticket(ticket: Ticket):
+        print(f"Changed state ticket: {ticket}")
 
     # Start listening for events
     print("Listening for events. Press Ctrl+C to exit.")
