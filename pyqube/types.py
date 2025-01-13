@@ -56,26 +56,36 @@ class TicketStateEnum:
 
 
 @dataclass
-class Ticket:
+class PublicTicket:
+    """
+    Class with public attributes of Qube's Ticket
+    """
+    id: int
+    queue_dest: int
+    priority: bool
+    state: TicketStateEnum
+    printed_tag: str
+    printed_number: str
+    created_at: datetime
+    invalidated_by_system: Optional[InvalidatedBySystemEnum]
+
+    def __post_init__(self):
+        self.created_at = convert_str_to_datetime(self.created_at)
+
+
+@dataclass
+class Ticket(PublicTicket):
     """
     Class with all attributes of Qube's Ticket
+    This class inherits from PublicTicket due to common attributes between them
     """
-
-    id: int
     signature: str
     updated_at: datetime
     number: int
-    printed_tag: str
-    printed_number: str
     note: Optional[str]
-    priority: bool
     priority_level: int
-    created_at: datetime
-    state: TicketStateEnum
-    invalidated_by_system: Optional[InvalidatedBySystemEnum]
     ticket_local_runner: Optional[int]
     queue: int
-    queue_dest: int
     counter_dest: Optional[int]
     profile_dest: Optional[int]
     generated_by_ticket_kiosk: Optional[int]
