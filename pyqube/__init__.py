@@ -2,7 +2,7 @@ from pyqube.events.clients import MQTTClient
 from pyqube.rest.clients import RestClient
 
 
-class QubeClient(MQTTClient, RestClient):
+class QubeClient(RestClient, MQTTClient):
     """
     A unified client that combines both MQTT and REST capabilities.
     It supports interacting with MQTT brokers for real-time messaging and with a REST API for general requests.
@@ -12,9 +12,9 @@ class QubeClient(MQTTClient, RestClient):
         self,
         api_key: str,
         location_id: int,
-        broker_url: str = None,
+        api_host: str = None,
+        broker_host: str = None,
         broker_port: int = None,
-        base_url: str = None,
         queue_management_manager: object = None
     ):
         """
@@ -23,10 +23,10 @@ class QubeClient(MQTTClient, RestClient):
         Args:
             api_key (str): API key for client authentication.
             location_id (int): Location ID to use in requests.
-            broker_url (str, optional): URL of the MQTT broker. Defaults to MQTTClient.DEFAULT_BROKER_URL.
+            api_host (str, optional): Host for REST API requests. Defaults to RestClient.DEFAULT_API_HOST.
+            broker_host (str, optional): Host of the MQTT broker. Defaults to MQTTClient.DEFAULT_BROKER_HOST.
             broker_port (int, optional): Port of the MQTT broker. Defaults to MQTTClient.DEFAULT_BROKER_PORT.
-            base_url (str, optional): Base URL for REST API requests. Defaults to RestClient.API_BASE_URL.
             queue_management_manager (object, optional): Manager used for queue management via REST API.
         """
-        MQTTClient.__init__(self, api_key, location_id, broker_url, broker_port)
-        RestClient.__init__(self, api_key, location_id, queue_management_manager, base_url)
+        RestClient.__init__(self, api_key, location_id, queue_management_manager, api_host)
+        MQTTClient.__init__(self, api_key, location_id, broker_host, broker_port)
