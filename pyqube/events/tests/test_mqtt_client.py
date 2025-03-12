@@ -28,21 +28,21 @@ class TestMQTTClient(unittest.TestCase):
         self.mock_client.tls_insecure_set.assert_called_once_with(False)
 
     def test_connect_to_broker(self):
-        """Test that the client connects to the broker with correct URL and port"""
+        """Test that the client connects to the broker with correct host and port"""
         self.mock_client.connect.assert_called_once_with(
-            host=MQTTClient.DEFAULT_BROKER_URL, port=MQTTClient.DEFAULT_BROKER_PORT, keepalive=60
+            host=MQTTClient.DEFAULT_BROKER_HOST, port=MQTTClient.DEFAULT_BROKER_PORT, keepalive=60
         )
         self.mock_client.loop_start.assert_called_once()
 
-    def test_initialization_with_custom_broker_url_and_port(self):
-        """Test that the client initializes with custom broker URL and port"""
-        custom_broker_url = "custom.broker.url"
+    def test_initialization_with_custom_broker_host_and_port(self):
+        """Test that the client initializes with custom broker host and port"""
+        custom_broker_host = "custom.broker.host"
         custom_broker_port = 1883
         client = MQTTClient(
-            api_key=self.api_key, broker_url=custom_broker_url, broker_port=custom_broker_port, location_id=1
+            api_key=self.api_key, broker_host=custom_broker_host, broker_port=custom_broker_port, location_id=1
         )
 
-        self.assertEqual(client.broker_url, custom_broker_url)
+        self.assertEqual(client.broker_host, custom_broker_host)
         self.assertEqual(client.broker_port, custom_broker_port)
 
     def test_disconnect(self):

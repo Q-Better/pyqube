@@ -16,11 +16,11 @@ from pyqube.types import Answering
 class TestGetCurrentAnswering(unittest.TestCase):
 
     def setUp(self):
-        self.base_url = "https://api-url-qube.com"
+        self.api_host = "api.qube.com"
         self.api_key = 'api_key'
         self.location_id = 1
 
-        self.qube_rest_client = RestClient(self.api_key, self.location_id, base_url=self.base_url)
+        self.qube_rest_client = RestClient(self.api_key, self.location_id, api_host=self.api_host)
 
         self.answering_data = {
             'id': 1,

@@ -18,13 +18,13 @@ from pyqube.types import Queue
 class TestListQueuesOfQueuesList(unittest.TestCase):
 
     def setUp(self):
-        self.base_url = "https://api-url-qube.com"
+        self.api_host = "api.qube.com"
         self.api_key = 'api_key'
         self.location_id = 1
         self.location_id_encoded = base64.b64encode(f"LocationNode:{self.location_id}".encode('utf-8')).decode('utf-8')
         self.queues_list_id = 1
 
-        self.qube_rest_client = RestClient(self.api_key, self.location_id, base_url=self.base_url)
+        self.qube_rest_client = RestClient(self.api_key, self.location_id, api_host=self.api_host)
 
         base_queue_fields = {
             'is_active': True,

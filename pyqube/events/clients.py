@@ -16,24 +16,24 @@ class MQTTClient(TicketHandler, QueuingSystemResetHandler, QueueHandler):
     and handling message events with user-defined handlers.
     """
 
-    DEFAULT_BROKER_URL = "mqtt.qube.q-better.com"
+    DEFAULT_BROKER_HOST = "mqtt.qube.q-better.com"
     DEFAULT_BROKER_PORT = 443
 
-    def __init__(self, api_key: str, location_id: id, broker_url: str = None, broker_port: int = None):
+    def __init__(self, api_key: str, location_id: id, broker_host: str = None, broker_port: int = None):
         """
         Initializes and connects the MQTT client.
 
         Args:
             api_key (str): API key for client authentication.
             location_id (int): Location ID to use in requests.
-            broker_url (str, optional): URL of the MQTT broker. Defaults to DEFAULT_BROKER_URL.
+            broker_host (str, optional): Host of the MQTT broker. Defaults to DEFAULT_BROKER_HOST.
             broker_port (int, optional): Port of the MQTT broker. Defaults to DEFAULT_BROKER_PORT.
         Raises:
             ConnectionError: If unable to connect to the broker.
         """
 
         super().__init__()
-        self.broker_url = broker_url or self.DEFAULT_BROKER_URL
+        self.broker_host = broker_host or self.DEFAULT_BROKER_HOST
         self.broker_port = broker_port or self.DEFAULT_BROKER_PORT
         self.location_id = location_id
 
@@ -61,10 +61,10 @@ class MQTTClient(TicketHandler, QueuingSystemResetHandler, QueueHandler):
     def _connect_to_broker(self) -> None:
         """Connects to the MQTT broker and starts the network loop."""
         try:
-            self.client.connect(host=self.broker_url, port=self.broker_port, keepalive=60)
+            self.client.connect(host=self.broker_host, port=self.broker_port, keepalive=60)
             self.client.loop_start()
         except Exception as e:
-            raise ConnectionError(f"Failed to connect to MQTT broker at {self.broker_url}:{self.broker_port}: {e}")
+            raise ConnectionError(f"Failed to connect to MQTT broker at {self.broker_host}:{self.broker_port}: {e}")
 
     def disconnect(self) -> None:
         """Stops the MQTT loop and disconnects from the broker."""

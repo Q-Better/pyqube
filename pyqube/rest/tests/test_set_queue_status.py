@@ -17,7 +17,7 @@ from pyqube.types import Queue
 class TestSetQueueStatus(unittest.TestCase):
 
     def setUp(self):
-        self.base_url = "https://api-url-qube.com"
+        self.api_host = "api.qube.com"
         self.api_key = 'api_key'
         self.location_id = 1
         self.location_access_id = 1
@@ -25,7 +25,7 @@ class TestSetQueueStatus(unittest.TestCase):
         self.queue_id = 1
         self.is_active = True
 
-        self.qube_rest_client = RestClient(self.api_key, self.location_id, base_url=self.base_url)
+        self.qube_rest_client = RestClient(self.api_key, self.location_id, api_host=self.api_host)
 
         self.queue_data = {
             'id': self.queue_id,
