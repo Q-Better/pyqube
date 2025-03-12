@@ -8,11 +8,6 @@ class SubscriptionError(MQTTClientError):
     pass
 
 
-class MessageHandlingError(MQTTClientError):
-    """Raised when an error occurs while handling an MQTT message."""
-    pass
-
-
 class PayloadError(MQTTClientError):
     """Base class for payload-related errors."""
     pass
