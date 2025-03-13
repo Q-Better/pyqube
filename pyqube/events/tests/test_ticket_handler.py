@@ -3,6 +3,7 @@ from unittest.mock import Mock
 
 from pyqube.events.exceptions import InvalidTicketHandlerArgumentsError
 from pyqube.events.handlers import TicketHandler
+from pyqube.types import AnsweringTicket, PublicTicket
 
 
 # Concrete subclass for testing purposes
@@ -31,10 +32,35 @@ class TestTicketHandler:
         handler = ticket_handler.on_ticket_called(counter_id=124)
         assert handler is not None
 
+    def test_on_ticket_called_with_counter_id_builds_correct_topic(self, ticket_handler):
+        """Test that on_ticket_called builds the correct topic for queue_id."""
+        ticket_handler.add_mqtt_handler = Mock()
+        ticket_handler.on_ticket_called(counter_id=124)
+        ticket_handler.add_mqtt_handler.assert_called_once_with(
+            "locations/1/counters/124/tickets/called", AnsweringTicket
+        )
+
     def test_on_ticket_called_with_queue_id(self, ticket_handler):
         """Test that on_ticket_called registers the correct handler for queue_id."""
         handler = ticket_handler.on_ticket_called(queue_id=90)
         assert handler is not None
+
+    def test_on_ticket_called_with_queue_id_builds_correct_topic(self, ticket_handler):
+        """Test that on_ticket_called builds the correct topic for queue_id."""
+        ticket_handler.add_mqtt_handler = Mock()
+        ticket_handler.on_ticket_called(queue_id=90)
+        ticket_handler.add_mqtt_handler.assert_called_once_with("locations/1/queues/90/tickets/called", AnsweringTicket)
+
+    def test_on_ticket_called_with_no_arguments(self, ticket_handler):
+        """Test that on_ticket_called registers the correct handler when no arguments are provided."""
+        handler = ticket_handler.on_ticket_called()
+        assert handler is not None
+
+    def test_on_ticket_called_with_no_arguments_builds_correct_topic(self, ticket_handler):
+        """Test that on_ticket_called builds the correct topic when no arguments are provided."""
+        ticket_handler.add_mqtt_handler = Mock()
+        ticket_handler.on_ticket_called()
+        ticket_handler.add_mqtt_handler.assert_called_once_with("locations/1/queues/+/tickets/called", AnsweringTicket)
 
     def test_invalid_ticket_handler_arguments(self, ticket_handler):
         """Test the behavior when both queue_id and counter_id are provided."""
@@ -45,3 +71,9 @@ class TestTicketHandler:
         """Test that on_ticket_changed_state registers the correct handler."""
         handler = ticket_handler.on_ticket_changed_state()
         assert handler is not None
+
+    def test_on_ticket_changed_state_builds_correct_topic(self, ticket_handler):
+        """Test that on_ticket_changed_state builds the correct topic."""
+        ticket_handler.add_mqtt_handler = Mock()
+        ticket_handler.on_ticket_changed_state()
+        ticket_handler.add_mqtt_handler.assert_called_once_with("locations/1/tickets/+/changed-state", PublicTicket)
