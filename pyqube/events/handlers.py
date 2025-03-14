@@ -218,7 +218,7 @@ class TicketHandler(MQTTEventHandlerBase, ABC):
             The decorator for the handler function.
 
         Raises:
-            InvalidTicketHandlerArgumentsError: If both or neither `queue_id` and `counter_id` are provided.
+            InvalidTicketHandlerArgumentsError: If both `queue_id` and `counter_id` are provided.
         """
         # Check that exactly one of the arguments is provided
         if (queue_id is not None) and (counter_id is not None):
