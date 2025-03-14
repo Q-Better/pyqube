@@ -81,7 +81,7 @@ class RestClient:
         response = requests.put(self.base_url + path, headers=self.headers, params=params, data=data, timeout=10)
         return response
 
-    def make_graphql_request(self, data: str = None) -> Response:
+    def graphql_request(self, data: str = None) -> Response:
         """
         Mas a POST request to GraphQL endpoint. This method can be useful for Managers.
         Args:
