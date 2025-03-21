@@ -12,18 +12,18 @@ class RestClient:
     (default or not) and making some requests to API Server.
     """
 
-    API_BASE_URL = "https://api.qube.q-better.com/en/api/v1"
+    DEFAULT_API_HOST = "api.qube.q-better.com"
 
-    def __init__(self, api_key: str, location_id: int, queue_management_manager: object = None, base_url: str = None):
+    def __init__(self, api_key: str, location_id: int, queue_management_manager: object = None, api_host: str = None):
         """
         Initializes the Rest Client.
         Args:
             api_key (str): API key for client authentication.
             location_id (int): Location's id that will be used in requests.
             queue_management_manager (object, optional): Manager used on API Server interactions. Defaults to None.
-            base_url (str, optional): Base url used on API interactions . Defaults to API_BASE_URL.
+            api_host (str, optional): Base host used on API interactions . Defaults to DEFAULT_API_HOST.
         """
-        self.base_url = base_url or self.API_BASE_URL
+        self.base_url = f"https://{api_host or self.DEFAULT_API_HOST}/en/api/v1"
         self.api_key = api_key
         self.headers = {
             "AUTHORIZATION": "Api-Key " + api_key,
@@ -81,7 +81,7 @@ class RestClient:
         response = requests.put(self.base_url + path, headers=self.headers, params=params, data=data, timeout=10)
         return response
 
-    def make_graphql_request(self, data: str = None) -> Response:
+    def graphql_request(self, data: str = None) -> Response:
         """
         Mas a POST request to GraphQL endpoint. This method can be useful for Managers.
         Args:

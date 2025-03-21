@@ -47,6 +47,7 @@ class TestTicketHandlerDecorator:
             counter=2,
             queue_tag="queue1",
             counter_tag="counter1",
+            called_at='2024-01-01T00:05:00.000000Z',
             created_at='2024-01-01T00:00:00.000000Z'
         ).__dict__
         mqtt_client._on_message(

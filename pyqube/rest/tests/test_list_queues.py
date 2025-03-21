@@ -16,11 +16,11 @@ from pyqube.types import Queue
 class TestListQueues(unittest.TestCase):
 
     def setUp(self):
-        self.base_url = "https://api-url-qube.com"
+        self.api_host = "api.qube.com"
         self.api_key = 'api_key'
         self.location_id = 1
 
-        self.qube_rest_client = RestClient(self.api_key, self.location_id, base_url=self.base_url)
+        self.qube_rest_client = RestClient(self.api_key, self.location_id, api_host=self.api_host)
 
         base_queue_fields = {
             'is_active': True,
@@ -113,7 +113,7 @@ class TestListQueues(unittest.TestCase):
         """Test list queues paginated and checks if a list of Queues is returned"""
         list_queues_path = f"/locations/{self.location_id}/queues/"
 
-        self.page_1_list_of_queues_response["next"] = f"https://api-url-qube.com{list_queues_path}?page=2"
+        self.page_1_list_of_queues_response["next"] = f"https://api.qube.com{list_queues_path}?page=2"
         mock_get_request.return_value.json.side_effect = [
             self.page_1_list_of_queues_response, self.page_2_list_of_queues_response
         ]

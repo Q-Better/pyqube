@@ -10,15 +10,16 @@ from pyqube.rest.queue_management_manager import QueueManagementManager
 class TestRestClient(unittest.TestCase):
 
     def setUp(self):
-        self.base_url = "https://api-url-qube.com"
+        self.api_host = "api.qube.com"
+        self._base_url = f"https://{self.api_host}/en/api/v1"
         self.api_key = 'api_key'
         self.location_id = 1
 
-        self.qube_rest_client = RestClient(self.api_key, self.location_id, base_url=self.base_url)
+        self.qube_rest_client = RestClient(self.api_key, self.location_id, api_host=self.api_host)
 
     def test_initialization_with_correct_credentials(self):
         """Test that the client initializes with correct credentials"""
-        self.assertEqual(self.qube_rest_client.base_url, self.base_url)
+        self.assertEqual(self.qube_rest_client.base_url, self._base_url)
         self.assertEqual(self.qube_rest_client.api_key, self.api_key)
         self.assertEqual(self.qube_rest_client.location_id, self.location_id)
 
@@ -40,7 +41,7 @@ class TestRestClient(unittest.TestCase):
             self.api_key,
             self.location_id,
             queue_management_manager=custom_queue_management_manager,
-            base_url=self.base_url
+            api_host=self.api_host
         )
         queue_management_manager_returned = qube_rest_client.get_queue_management_manager()
 
@@ -55,7 +56,7 @@ class TestRestClient(unittest.TestCase):
         }
         self.qube_rest_client.get_request(path, params)
         mock_requests_get.assert_called_once_with(
-            self.base_url + path, headers=self.qube_rest_client.headers, params=params, timeout=10
+            self._base_url + path, headers=self.qube_rest_client.headers, params=params, timeout=10
         )
 
     @patch.object(requests, "post")
@@ -70,7 +71,7 @@ class TestRestClient(unittest.TestCase):
         }
         self.qube_rest_client.post_request(path, params, data)
         mock_requests_get.assert_called_once_with(
-            self.base_url + path, headers=self.qube_rest_client.headers, params=params, data=data, timeout=10
+            self._base_url + path, headers=self.qube_rest_client.headers, params=params, data=data, timeout=10
         )
 
     @patch.object(requests, "put")
@@ -85,5 +86,5 @@ class TestRestClient(unittest.TestCase):
         }
         self.qube_rest_client.put_request(path, params, data)
         mock_requests_get.assert_called_once_with(
-            self.base_url + path, headers=self.qube_rest_client.headers, params=params, data=data, timeout=10
+            self._base_url + path, headers=self.qube_rest_client.headers, params=params, data=data, timeout=10
         )

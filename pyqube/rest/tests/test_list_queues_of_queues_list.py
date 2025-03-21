@@ -14,17 +14,17 @@ from pyqube.rest.graphql_generators import QueuesListGraphQLGenerator
 from pyqube.types import Queue
 
 
-@patch.object(RestClient, "make_graphql_request")
+@patch.object(RestClient, "graphql_request")
 class TestListQueuesOfQueuesList(unittest.TestCase):
 
     def setUp(self):
-        self.base_url = "https://api-url-qube.com"
+        self.api_host = "api.qube.com"
         self.api_key = 'api_key'
         self.location_id = 1
         self.location_id_encoded = base64.b64encode(f"LocationNode:{self.location_id}".encode('utf-8')).decode('utf-8')
         self.queues_list_id = 1
 
-        self.qube_rest_client = RestClient(self.api_key, self.location_id, base_url=self.base_url)
+        self.qube_rest_client = RestClient(self.api_key, self.location_id, api_host=self.api_host)
 
         base_queue_fields = {
             'is_active': True,
@@ -143,10 +143,10 @@ class TestListQueuesOfQueuesList(unittest.TestCase):
             item["schedule"] = int(base64.b64decode(item["schedule"]["id"]).decode('utf-8').split(":")[1])
         return Queue(**item)
 
-    def test_list_queues_of_queues_list_with_one_page_with_success(self, mock_make_graphql_request):
+    def test_list_queues_of_queues_list_with_one_page_with_success(self, mock_graphql_request):
         # def test_list_queues_of_queues_list_with_success(self):
         """Test list queues paginated and checks if a list of Queues is returned"""
-        mock_make_graphql_request.return_value.json.return_value = self.page_1_list_of_queues_of_queues_list_response
+        mock_graphql_request.return_value.json.return_value = self.page_1_list_of_queues_of_queues_list_response
 
         list_of_queues_of_queues_list_generator = self.qube_rest_client.get_queue_management_manager(
         ).list_queues_of_queues_list(self.queues_list_id)
@@ -161,13 +161,13 @@ class TestListQueuesOfQueuesList(unittest.TestCase):
         expected_query = QueuesListGraphQLGenerator.generate_query_body(
             queues_list=self.queues_list_id, first=10, after="\"\""
         )
-        mock_make_graphql_request.assert_called_once_with(expected_query)
+        mock_graphql_request.assert_called_once_with(expected_query)
 
-    def test_list_queues_of_queues_list_with_multiple_pages_with_success(self, mock_make_graphql_request):
+    def test_list_queues_of_queues_list_with_multiple_pages_with_success(self, mock_graphql_request):
         """Test list queues paginated and checks if a list of Queues is returned"""
         self.page_1_list_of_queues_of_queues_list_response["data"]["queues_lists_queues"]["pageInfo"]["hasNextPage"
                                                                                                       ] = True
-        mock_make_graphql_request.return_value.json.side_effect = [
+        mock_graphql_request.return_value.json.side_effect = [
             self.page_1_list_of_queues_of_queues_list_response, self.page_2_list_of_queues_of_queues_list_response
         ]
 
@@ -183,25 +183,27 @@ class TestListQueuesOfQueuesList(unittest.TestCase):
             self.assertEqual(page_with_queues, expected_queues_list_pages[page - 1])
             page += 1
 
-        mock_make_graphql_request.assert_has_calls([
-            call(
-                QueuesListGraphQLGenerator.generate_query_body(
-                    queues_list=self.queues_list_id, first=page_size, after="\"\""
-                )
-            ),
-            call(
-                QueuesListGraphQLGenerator.generate_query_body(
-                    queues_list=self.queues_list_id, first=page_size, after="\"end_cursor_1\""
-                )
-            ),
-        ],
-                                                   any_order=True)
+        mock_graphql_request.assert_has_calls(
+            [
+                call(
+                    QueuesListGraphQLGenerator.generate_query_body(
+                        queues_list=self.queues_list_id, first=page_size, after="\"\""
+                    )
+                ),
+                call(
+                    QueuesListGraphQLGenerator.generate_query_body(
+                        queues_list=self.queues_list_id, first=page_size, after="\"end_cursor_1\""
+                    )
+                ),
+            ],
+            any_order=True,
+        )
 
-    def test_list_queues_of_queues_list_without_queues_with_success(self, mock_make_graphql_request):
+    def test_list_queues_of_queues_list_without_queues_with_success(self, mock_graphql_request):
         """Test list queues paginated and checks if a list of Queues is returned"""
 
         self.page_1_list_of_queues_of_queues_list_response["data"]["queues_lists_queues"]["edges"] = []
-        mock_make_graphql_request.return_value.json.return_value = self.page_1_list_of_queues_of_queues_list_response
+        mock_graphql_request.return_value.json.return_value = self.page_1_list_of_queues_of_queues_list_response
 
         list_of_queues_generator = self.qube_rest_client.get_queue_management_manager().list_queues_of_queues_list(
             self.queues_list_id
@@ -213,7 +215,7 @@ class TestListQueuesOfQueuesList(unittest.TestCase):
         expected_query = QueuesListGraphQLGenerator.generate_query_body(
             queues_list=self.queues_list_id, first=10, after="\"\""
         )
-        mock_make_graphql_request.assert_called_once_with(expected_query)
+        mock_graphql_request.assert_called_once_with(expected_query)
 
     def test_list_queues_of_queues_list_for_bad_request(self, mock_get_request):
         """Test list queues paginated to raises an Exception (BadRequest)"""

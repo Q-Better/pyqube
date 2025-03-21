@@ -261,7 +261,7 @@ class QueueManagementManager:
                 queues_list=queues_list_id, first=page_size, after=after
             )
 
-            response = self.client.make_graphql_request(query)
+            response = self.client.graphql_request(query)
             self._validate_response(response)
 
             response_data = response.json()

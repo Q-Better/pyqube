@@ -139,6 +139,7 @@ class AnsweringTicket:
     counter: int
     queue_tag: str
     counter_tag: str
+    called_at: datetime
     created_at: datetime
     tags: Optional[List[str]] = None
 
