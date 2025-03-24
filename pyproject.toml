@@ -17,6 +17,11 @@ yapf = "^0.40.2"
 isort = "^5.13.2"
 pytest = "^8.3.3"
 
+[tool.poetry.urls]
+"Repository" = "https://github.com/Q-Better/pyqube"
+"Documentation" = "https://docs.qube.q-better.com/docs/examples/sdk"
+"Issue Tracker" = "https://github.com/Q-Better/pyqube/issues"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
