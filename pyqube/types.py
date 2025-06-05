@@ -33,11 +33,6 @@ class AuthGroupEnum:
     DEVICE = 4
 
 
-class LocationAccessStatusEnum:
-    STATUS_PENDING = 1
-    STATUS_ACCEPTED = 2
-
-
 class FinishReasonEnum:
     CANCEL = 1
     TRANSFER_QUEUE = 2
@@ -229,8 +224,8 @@ class LocationAccessWithCurrentCounter:
     profile: int
     current_counter: Counter
     groups: List[AuthGroupEnum]
-    invitation_email: str
-    status: LocationAccessStatusEnum
+    invitation_token: Optional[str]
+    invitation_token_created_at: Optional[datetime]
     created_at: datetime
     updated_at: Optional[datetime]
     deleted_at: Optional[datetime]
