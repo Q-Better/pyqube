@@ -14,7 +14,7 @@ class NotAuthorized(RestClientError):
 
 
 class Forbidden(RestClientError):
-    """Raised when a client has not permission to make a request."""
+    """Raised when a client has no permission to make a request."""
     pass
 
 
@@ -94,7 +94,7 @@ class InactiveQueueException(QueueManagementError):
 
 
 class InvalidScheduleException(QueueManagementError):
-    """Raised when we are generating a Ticket outside of the scheduled operating time."""
+    """Raised when we are generating a Ticket outside the scheduled operating time."""
 
     def __init__(self):
         self.message = "You are currently outside the scheduled operating time. Please contact your admin."

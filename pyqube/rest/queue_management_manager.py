@@ -146,7 +146,7 @@ class QueueManagementManager:
         Set the current Counter on a given LocationAccess.
         Args:
             location_access_id (int): LocationAccess' id that will have stored the current counter information.
-            counter_id (int): Counter's id that will be setted.
+            counter_id (int): Counter's id that will be set.
         Returns:
             LocationAccessWithCurrentCounter: The updated LocationAccess object.
         """
@@ -242,14 +242,16 @@ class QueueManagementManager:
 
             yield [Queue(**item) for item in response_data["results"]]
 
-    def list_queues_of_queues_list(self, queues_list_id: int, page_size: int = 10) -> List[Queue]:
+    def list_queues_of_queues_list(self,
+                                   queues_list_id: int,
+                                   page_size: int = 10) -> Generator[List[Queue], None, None]:
         """
         Gets one list of queues that are associated with given QueuesList
         Args:
             queues_list_id (int): QueuesList's id that have queues associated.
             page_size (int): Number of Queues per page.
         Returns:
-            List[Queue]: List of Queues associated with given QueuesList.
+            Generator[List[Queue]]: List of Queues associated with given QueuesList.
         """
         has_next_page = True
         after = "\"\""
