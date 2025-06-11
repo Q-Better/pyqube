@@ -208,7 +208,7 @@ class TestEndAnswering(unittest.TestCase):
         with self.assertRaises(MismatchingCountersException):
             self.qube_rest_client.get_queue_management_manager().end_answering(profile_id, answering_id)
 
-    def test_end_answering_for_mismatching_counters_exception(self, mock_put_request):
+    def test_end_answering_for_inactive_queue_exception(self, mock_put_request):
         """Test end answering to raises an Exception (InactiveQueueException)"""
         profile_id = 1
         answering_id = 1

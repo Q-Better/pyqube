@@ -19,7 +19,7 @@ pytest = "^8.3.3"
 
 [tool.poetry.urls]
 "Repository" = "https://github.com/Q-Better/pyqube"
-"Documentation" = "https://docs.qube.q-better.com/docs/examples/sdk"
+"Documentation" = "https://docs.qube.q-better.com/docs/guides/getting-started"
 "Issue Tracker" = "https://github.com/Q-Better/pyqube/issues"
 
 [build-system]

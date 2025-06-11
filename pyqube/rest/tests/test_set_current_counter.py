@@ -40,8 +40,8 @@ class TestSetCurrentCounter(unittest.TestCase):
                 'location': self.location_id
             },
             'groups': [1],
-            'invitation_email': 'email@example.com',
-            'status': 2,
+            'invitation_token': None,
+            'invitation_token_created_at': None,
             'created_at': '2024-01-01T00:00:00.000000Z',
             'updated_at': '2024-01-01T00:00:00.000000Z',
             'deleted_at': None,
